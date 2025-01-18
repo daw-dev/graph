@@ -1,7 +1,7 @@
 use std::{
     collections::{HashMap, HashSet},
     fmt::Debug,
-    hash::Hash,
+    hash::Hash, ops::{Index, IndexMut},
 };
 
 use super::graph::Graph;
@@ -33,6 +33,14 @@ where
         if let Some((_, adjacents)) = self.matrix.get_mut(&from) {
             adjacents.insert(to);
         }
+    }
+
+    pub fn get(&self, node_id: &NodeId) -> Option<&Node> {
+        self.matrix.get(node_id).map(|(info, _)| info)
+    }
+
+    pub fn get_mut(&mut self, node_id: &NodeId) -> Option<&mut Node> {
+        self.matrix.get_mut(node_id).map(|(info, _)| info)
     }
 }
 
@@ -78,5 +86,25 @@ where
         Self {
             matrix: Default::default(),
         }
+    }
+}
+
+impl<NodeId, Node> Index<NodeId> for AdjacencyVecGraph<NodeId, Node>
+where
+    NodeId: Hash + Eq,
+{
+    type Output = Node;
+
+    fn index(&self, index: NodeId) -> &Self::Output {
+        self.get(&index).expect("Node not found")
+    }
+}
+
+impl<NodeId, Node> IndexMut<NodeId> for AdjacencyVecGraph<NodeId, Node>
+where
+    NodeId: Hash + Eq,
+{
+    fn index_mut(&mut self, index: NodeId) -> &mut Self::Output {
+        self.get_mut(&index).expect("Node not found")
     }
 }

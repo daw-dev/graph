@@ -6,6 +6,9 @@ struct Node {
 }
 
 fn main() {
+    let mut my_vec = vec![1, 2, 3, 4, 5];
+    my_vec[0] += 2;
+
     let mut graph = AdjacencyVecGraph::<u8, Node>::new();
     println!("{graph:?}");
     graph.add_node(
@@ -25,5 +28,6 @@ fn main() {
 
     for node in graph.pre_order_dfs(&46) {
         println!("{node:?}");
+        println!("name: {}", graph[*node].name);
     }
 }
