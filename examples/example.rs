@@ -1,4 +1,4 @@
-use graph::{adj_vec::AdjacencyVecGraph, traits::Graph};
+use graph::{AdjacencyVecGraph, Graph};
 
 #[derive(Debug)]
 struct Node {

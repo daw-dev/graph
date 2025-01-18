@@ -96,7 +96,7 @@ After adding the dependency run `cargo update` to update the library to the newe
 Then, you can just import it in your `.rs` files (taken from `examples/example.rs`):
 
 ```rust
-use graph::{adj_vec::AdjacencyVecGraph, traits::Graph};
+use graph::{AdjacencyVecGraph, Graph};
 
 #[derive(Debug)]
 struct Node {
