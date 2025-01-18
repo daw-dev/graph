@@ -1,5 +1,5 @@
 use std::hash::Hash;
-use crate::traversal::{PostOrderDFS, PreOrderDFS, BFS};
+use crate::{topsort::TopSort, traversal::{PostOrderDFS, PreOrderDFS, BFS}};
 
 pub trait Graph {
     type NodeId;
@@ -35,5 +35,12 @@ pub trait Graph {
         Self::NodeId: Hash + Eq,
     {
         BFS::new(self, root)
+    }
+    fn top_sort<'a>(&'a self) -> TopSort<'a, Self::NodeId>
+    where
+        Self: Sized,
+        Self::NodeId: Hash + Eq,
+    {
+        TopSort::new(self)
     }
 }
