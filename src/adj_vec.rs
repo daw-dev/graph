@@ -4,7 +4,7 @@ use std::{
     hash::Hash,
 };
 
-use super::traits::Graph;
+use super::graph::Graph;
 
 pub struct AdjacencyVecGraph<NodeId, NodeType>
 where
