@@ -6,26 +6,26 @@ use std::{
 
 use super::traits::Graph;
 
-pub struct AdjacencyVecGraph<Id, Node>
+pub struct AdjacencyVecGraph<NodeId, NodeType>
 where
-    Id: Hash + Eq,
+    NodeId: Hash + Eq,
 {
-    matrix: HashMap<Id, (Node, HashSet<Id>)>,
+    matrix: HashMap<NodeId, (NodeType, HashSet<NodeId>)>,
 }
 
-impl<Id, Node> AdjacencyVecGraph<Id, Node>
+impl<NodeId, Node> AdjacencyVecGraph<NodeId, Node>
 where
-    Id: Hash + Eq,
+    NodeId: Hash + Eq,
 {
     pub fn new() -> Self {
         Default::default()
     }
 
-    pub fn add_node(&mut self, node_id: Id, node_info: Node) {
+    pub fn add_node(&mut self, node_id: NodeId, node_info: Node) {
         self.matrix.insert(node_id, (node_info, HashSet::new()));
     }
 
-    pub fn connect(&mut self, from: Id, to: Id) {
+    pub fn connect(&mut self, from: NodeId, to: NodeId) {
         if from == to {
             return;
         }
@@ -36,30 +36,24 @@ where
     }
 }
 
-impl<Id, Node> Graph for AdjacencyVecGraph<Id, Node>
+impl<NodeId, Node> Graph for AdjacencyVecGraph<NodeId, Node>
 where
-    Id: Hash + Eq,
+    NodeId: Hash + Eq,
 {
-    type NodeIdType = Id;
+    type NodeId = NodeId;
 
-    type NodeType = Node;
-
-    fn adjacents(&self, node: &Self::NodeIdType) -> impl Iterator<Item = &Self::NodeIdType> {
+    fn adjacents(&self, node: &Self::NodeId) -> impl Iterator<Item = &Self::NodeId> {
         self.matrix[node].1.iter()
     }
 
-    fn iter(&self) -> impl Iterator<Item = &Self::NodeIdType> {
+    fn iter(&self) -> impl Iterator<Item = &Self::NodeId> {
         self.matrix.keys()
-    }
-
-    fn node_info(&self, node: &Self::NodeIdType) -> &Self::NodeType {
-        &self.matrix[node].0
     }
 }
 
-impl<Id, Node> Debug for AdjacencyVecGraph<Id, Node>
+impl<NodeId, Node> Debug for AdjacencyVecGraph<NodeId, Node>
 where
-    Id: Hash + Eq + Debug,
+    NodeId: Hash + Eq + Debug,
     Node: Debug,
 {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
@@ -76,9 +70,9 @@ where
     }
 }
 
-impl<Id, Node> Default for AdjacencyVecGraph<Id, Node>
+impl<NodeId, Node> Default for AdjacencyVecGraph<NodeId, Node>
 where
-    Id: Hash + Eq,
+    NodeId: Hash + Eq,
 {
     fn default() -> Self {
         Self {

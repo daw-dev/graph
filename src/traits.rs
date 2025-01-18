@@ -1,21 +1,21 @@
 use std::{collections::{HashSet, VecDeque}, hash::Hash};
 
-pub struct PreOrderDFS<'a, Id, G>
+pub struct PreOrderDFS<'a, NodeId, G>
 where
-    Id: Hash + Eq,
-    G: Graph<NodeIdType = Id>,
+    NodeId: Hash + Eq,
+    G: Graph<NodeId = NodeId>,
 {
     graph: &'a G,
-    visited: HashSet<&'a Id>,
-    stack: Vec<&'a Id>,
+    visited: HashSet<&'a NodeId>,
+    stack: Vec<&'a NodeId>,
 }
 
-impl<'a, Id, G> PreOrderDFS<'a, Id, G>
+impl<'a, NodeId, G> PreOrderDFS<'a, NodeId, G>
 where
-    Id: Hash + Eq,
-    G: Graph<NodeIdType = Id>,
+    NodeId: Hash + Eq,
+    G: Graph<NodeId = NodeId>,
 {
-    fn new(graph: &'a G, root: &'a Id) -> Self {
+    fn new(graph: &'a G, root: &'a NodeId) -> Self {
         Self {
             graph,
             visited: HashSet::new(),
@@ -24,12 +24,12 @@ where
     }
 }
 
-impl<'a, Id, G> Iterator for PreOrderDFS<'a, Id, G>
+impl<'a, NodeId, G> Iterator for PreOrderDFS<'a, NodeId, G>
 where
-    Id: Hash + Eq,
-    G: Graph<NodeIdType = Id>,
+    NodeId: Hash + Eq,
+    G: Graph<NodeId = NodeId>,
 {
-    type Item = &'a Id;
+    type Item = &'a NodeId;
 
     fn next(&mut self) -> Option<Self::Item> {
         let current = self.stack.pop()?;
@@ -51,22 +51,22 @@ enum VisitTag {
     Finished,
 }
 
-pub struct PostOrderDFS<'a, Id, G>
+pub struct PostOrderDFS<'a, NodeId, G>
 where
-    Id: Hash + Eq,
-    G: Graph<NodeIdType = Id>,
+    NodeId: Hash + Eq,
+    G: Graph<NodeId = NodeId>,
 {
     graph: &'a G,
-    visited: HashSet<&'a Id>,
-    stack: Vec<(&'a Id, VisitTag)>,
+    visited: HashSet<&'a NodeId>,
+    stack: Vec<(&'a NodeId, VisitTag)>,
 }
 
-impl<'a, Id, G> PostOrderDFS<'a, Id, G>
+impl<'a, NodeId, G> PostOrderDFS<'a, NodeId, G>
 where
-    Id: Hash + Eq,
-    G: Graph<NodeIdType = Id>,
+    NodeId: Hash + Eq,
+    G: Graph<NodeId = NodeId>,
 {
-    fn new(graph: &'a G, root: &'a Id) -> Self {
+    fn new(graph: &'a G, root: &'a NodeId) -> Self {
         Self {
             graph,
             visited: HashSet::new(),
@@ -75,12 +75,12 @@ where
     }
 }
 
-impl<'a, Id, G> Iterator for PostOrderDFS<'a, Id, G>
+impl<'a, NodeId, G> Iterator for PostOrderDFS<'a, NodeId, G>
 where
-    Id: Hash + Eq,
-    G: Graph<NodeIdType = Id>,
+    NodeId: Hash + Eq,
+    G: Graph<NodeId = NodeId>,
 {
-    type Item = &'a Id;
+    type Item = &'a NodeId;
 
     fn next(&mut self) -> Option<Self::Item> {
         let (current, tag) = self.stack.pop()?;
@@ -104,22 +104,22 @@ where
     }
 }
 
-pub struct BFS<'a, Id, G>
+pub struct BFS<'a, NodeId, G>
 where
-    Id: Hash + Eq,
-    G: Graph<NodeIdType = Id>,
+    NodeId: Hash + Eq,
+    G: Graph<NodeId = NodeId>,
 {
     graph: &'a G,
-    visited: HashSet<&'a Id>,
-    queue: VecDeque<&'a Id>,
+    visited: HashSet<&'a NodeId>,
+    queue: VecDeque<&'a NodeId>,
 }
 
-impl<'a, Id, G> BFS<'a, Id, G>
+impl<'a, NodeId, G> BFS<'a, NodeId, G>
 where
-    Id: Hash + Eq,
-    G: Graph<NodeIdType = Id>,
+    NodeId: Hash + Eq,
+    G: Graph<NodeId = NodeId>,
 {
-    fn new(graph: &'a G, root: &'a Id) -> Self {
+    fn new(graph: &'a G, root: &'a NodeId) -> Self {
         Self {
             graph,
             visited: HashSet::new(),
@@ -128,12 +128,12 @@ where
     }
 }
 
-impl<'a, Id, G> Iterator for BFS<'a, Id, G>
+impl<'a, NodeId, G> Iterator for BFS<'a, NodeId, G>
 where
-    Id: Hash + Eq,
-    G: Graph<NodeIdType = Id>,
+    NodeId: Hash + Eq,
+    G: Graph<NodeId = NodeId>,
 {
-    type Item = &'a Id;
+    type Item = &'a NodeId;
 
     fn next(&mut self) -> Option<Self::Item> {
         let current = self.queue.pop_front()?;
@@ -151,39 +151,37 @@ where
 }
 
 pub trait Graph {
-    type NodeIdType;
-    type NodeType;
+    type NodeId;
 
-    fn adjacents(&self, node: &Self::NodeIdType) -> impl Iterator<Item = &Self::NodeIdType>;
-    fn iter(&self) -> impl Iterator<Item = &Self::NodeIdType>;
-    fn node_info(&self, node: &Self::NodeIdType) -> &Self::NodeType;
+    fn adjacents(&self, node: &Self::NodeId) -> impl Iterator<Item = &Self::NodeId>;
+    fn iter(&self) -> impl Iterator<Item = &Self::NodeId>;
     fn pre_order_dfs<'a>(
         &'a self,
-        root: &'a Self::NodeIdType,
-    ) -> PreOrderDFS<'a, Self::NodeIdType, Self>
+        root: &'a Self::NodeId,
+    ) -> PreOrderDFS<'a, Self::NodeId, Self>
     where
         Self: Sized,
-        Self::NodeIdType: Hash + Eq,
+        Self::NodeId: Hash + Eq,
     {
         PreOrderDFS::new(self, root)
     }
     fn post_order_dfs<'a>(
         &'a self,
-        root: &'a Self::NodeIdType,
-    ) -> PostOrderDFS<'a, Self::NodeIdType, Self>
+        root: &'a Self::NodeId,
+    ) -> PostOrderDFS<'a, Self::NodeId, Self>
     where
         Self: Sized,
-        Self::NodeIdType: Hash + Eq,
+        Self::NodeId: Hash + Eq,
     {
         PostOrderDFS::new(self, root)
     }
     fn bfs<'a>(
         &'a self,
-        root: &'a Self::NodeIdType,
-    ) -> BFS<'a, Self::NodeIdType, Self>
+        root: &'a Self::NodeId,
+    ) -> BFS<'a, Self::NodeId, Self>
     where
         Self: Sized,
-        Self::NodeIdType: Hash + Eq,
+        Self::NodeId: Hash + Eq,
     {
         BFS::new(self, root)
     }
