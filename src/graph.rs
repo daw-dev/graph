@@ -45,30 +45,20 @@ pub trait Graph<'a> {
     }
 }
 
-const fn const_ids<const SIZE: usize>() -> [usize; SIZE] {
-    let mut ids = [0; SIZE];
-    let mut i = 0;
-    while i < SIZE {
-        ids[i] = i;
-        i += 1;
+impl<'a, const SIZE: usize> Graph<'a> for [[bool; SIZE]; SIZE] {
+    type NodeId = usize;
+
+    fn adjacents(&'a self, node: usize) -> impl Iterator<Item = usize> {
+        self[node].iter().enumerate().filter_map(|(idx, &is_adj)| {
+            if is_adj {
+                Some(idx)
+            } else {
+                None
+            }
+        })
     }
-    ids
+
+    fn iter(&'a self) -> impl Iterator<Item = usize> {
+        0..SIZE
+    }
 }
-
-// impl<const SIZE: usize> Graph for [[bool; SIZE]; SIZE] {
-//     type NodeId = usize;
-
-//     fn adjacents(&self, node: &Self::NodeId) -> impl Iterator<Item = &Self::NodeId> {
-//         self[*node].iter().enumerate().filter_map(|(idx, &is_adj)| {
-//             if is_adj {
-//                 Some(&const_ids::<SIZE>()[idx])
-//             } else {
-//                 None
-//             }
-//         })
-//     }
-
-//     fn iter(&self) -> impl Iterator<Item = &Self::NodeId> {
-//         const_ids::<SIZE>().iter()
-//     }
-// }
