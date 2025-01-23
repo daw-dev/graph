@@ -3,20 +3,20 @@ use crate::Graph;
 
 pub struct BFS<'a, NodeId, G>
 where
-    NodeId: Hash + Eq,
-    G: Graph<NodeId = NodeId>,
+    NodeId: Hash + Eq + Copy,
+    G: Graph<'a, NodeId = NodeId>,
 {
     graph: &'a G,
-    visited: HashSet<&'a NodeId>,
-    queue: VecDeque<&'a NodeId>,
+    visited: HashSet<NodeId>,
+    queue: VecDeque<NodeId>,
 }
 
 impl<'a, NodeId, G> BFS<'a, NodeId, G>
 where
-    NodeId: Hash + Eq,
-    G: Graph<NodeId = NodeId>,
+    NodeId: Hash + Eq + Copy,
+    G: Graph<'a, NodeId = NodeId>,
 {
-    pub fn new(graph: &'a G, root: &'a NodeId) -> Self {
+    pub fn new(graph: &'a G, root: NodeId) -> Self {
         Self {
             graph,
             visited: HashSet::new(),
@@ -24,7 +24,7 @@ where
         }
     }
 
-    pub fn with_visited(graph: &'a G, root: &'a NodeId, visited: HashSet<&'a NodeId>) -> Self {
+    pub fn with_visited(graph: &'a G, root: NodeId, visited: HashSet<NodeId>) -> Self {
         Self {
             graph,
             visited,
@@ -35,10 +35,10 @@ where
 
 impl<'a, NodeId, G> Iterator for BFS<'a, NodeId, G>
 where
-    NodeId: Hash + Eq,
-    G: Graph<NodeId = NodeId>,
+    NodeId: Hash + Eq + Copy,
+    G: Graph<'a, NodeId = NodeId>,
 {
-    type Item = &'a NodeId;
+    type Item = NodeId;
 
     fn next(&mut self) -> Option<Self::Item> {
         let current = self.queue.pop_front()?;
@@ -46,7 +46,7 @@ where
         self.visited.insert(current);
 
         for adj in self.graph.adjacents(current) {
-            if !self.visited.contains(adj) {
+            if !self.visited.contains(&adj) {
                 self.queue.push_back(adj);
             }
         }

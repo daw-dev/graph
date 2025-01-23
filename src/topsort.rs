@@ -1,18 +1,19 @@
-use std::{collections::HashSet, hash::Hash};
+use std::{collections::HashSet, hash::Hash, marker::PhantomData};
 use crate::{traversal::PostOrderDFS, Graph};
 
 pub struct TopSort<'a, NodeId>
 where
     NodeId: Hash + Eq,
 {
-    stack: Vec<&'a NodeId>,
+    stack: Vec<NodeId>,
+    phantom: PhantomData<&'a NodeId>,
 }
 
 impl<'a, NodeId> TopSort<'a, NodeId>
 where
-    NodeId: Hash + Eq,
+    NodeId: Hash + Eq + Copy,
 {
-    pub fn new(graph: &'a impl Graph<NodeId = NodeId>) -> Self {
+    pub fn new(graph: &'a impl Graph<'a, NodeId = NodeId>) -> Self {
         let mut stack = Vec::new();
         let mut visited = HashSet::new();
 
@@ -26,15 +27,16 @@ where
 
         Self {
             stack,
+            phantom: PhantomData,
         }
     }
 }
 
 impl<'a, NodeId> Iterator for TopSort<'a, NodeId>
 where
-    NodeId: Hash + Eq,
+    NodeId: Hash + Eq + Copy,
 {
-    type Item = &'a NodeId;
+    type Item = NodeId;
 
     fn next(&mut self) -> Option<Self::Item> {
         self.stack.pop()

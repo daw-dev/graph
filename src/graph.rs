@@ -1,14 +1,14 @@
 use std::hash::Hash;
 use crate::{topsort::TopSort, traversal::{PostOrderDFS, PreOrderDFS, BFS}};
 
-pub trait Graph {
-    type NodeId;
+pub trait Graph<'a> {
+    type NodeId: Copy + 'a;
 
-    fn adjacents(&self, node: &Self::NodeId) -> impl Iterator<Item = &Self::NodeId>;
-    fn iter(&self) -> impl Iterator<Item = &Self::NodeId>;
-    fn pre_order_dfs<'a>(
+    fn adjacents(&'a self, node: Self::NodeId) -> impl Iterator<Item = Self::NodeId>;
+    fn iter(&'a self) -> impl Iterator<Item = Self::NodeId>;
+    fn pre_order_dfs(
         &'a self,
-        root: &'a Self::NodeId,
+        root: Self::NodeId,
     ) -> PreOrderDFS<'a, Self::NodeId, Self>
     where
         Self: Sized,
@@ -16,9 +16,9 @@ pub trait Graph {
     {
         PreOrderDFS::new(self, root)
     }
-    fn post_order_dfs<'a>(
+    fn post_order_dfs(
         &'a self,
-        root: &'a Self::NodeId,
+        root: Self::NodeId,
     ) -> PostOrderDFS<'a, Self::NodeId, Self>
     where
         Self: Sized,
@@ -26,9 +26,9 @@ pub trait Graph {
     {
         PostOrderDFS::new(self, root)
     }
-    fn bfs<'a>(
+    fn bfs(
         &'a self,
-        root: &'a Self::NodeId,
+        root: Self::NodeId,
     ) -> BFS<'a, Self::NodeId, Self>
     where
         Self: Sized,
@@ -36,7 +36,7 @@ pub trait Graph {
     {
         BFS::new(self, root)
     }
-    fn top_sort<'a>(&'a self) -> TopSort<'a, Self::NodeId>
+    fn top_sort(&'a self) -> TopSort<'a, Self::NodeId>
     where
         Self: Sized,
         Self::NodeId: Hash + Eq,
@@ -44,3 +44,31 @@ pub trait Graph {
         TopSort::new(self)
     }
 }
+
+const fn const_ids<const SIZE: usize>() -> [usize; SIZE] {
+    let mut ids = [0; SIZE];
+    let mut i = 0;
+    while i < SIZE {
+        ids[i] = i;
+        i += 1;
+    }
+    ids
+}
+
+// impl<const SIZE: usize> Graph for [[bool; SIZE]; SIZE] {
+//     type NodeId = usize;
+
+//     fn adjacents(&self, node: &Self::NodeId) -> impl Iterator<Item = &Self::NodeId> {
+//         self[*node].iter().enumerate().filter_map(|(idx, &is_adj)| {
+//             if is_adj {
+//                 Some(&const_ids::<SIZE>()[idx])
+//             } else {
+//                 None
+//             }
+//         })
+//     }
+
+//     fn iter(&self) -> impl Iterator<Item = &Self::NodeId> {
+//         const_ids::<SIZE>().iter()
+//     }
+// }

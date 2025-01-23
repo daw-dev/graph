@@ -1,19 +1,18 @@
 use std::{
-    collections::{HashMap, HashSet},
-    fmt::Debug,
-    hash::Hash, ops::{Index, IndexMut},
+    collections::{HashMap, HashSet}, fmt::Debug, hash::Hash, marker::PhantomData, ops::{Index, IndexMut}
 };
 
 use super::graph::Graph;
 
-pub struct AdjacencyVecGraph<NodeId, NodeType>
+pub struct AdjacencyVecGraph<'a, NodeId, NodeType>
 where
     NodeId: Hash + Eq,
 {
     matrix: HashMap<NodeId, (NodeType, HashSet<NodeId>)>,
+    phantom: PhantomData<&'a NodeId>,
 }
 
-impl<NodeId, Node> AdjacencyVecGraph<NodeId, Node>
+impl<'a, NodeId, Node> AdjacencyVecGraph<'a, NodeId, Node>
 where
     NodeId: Hash + Eq,
 {
@@ -44,22 +43,22 @@ where
     }
 }
 
-impl<NodeId, Node> Graph for AdjacencyVecGraph<NodeId, Node>
+impl<'a, Id, Node> Graph<'a> for AdjacencyVecGraph<'a, Id, Node>
 where
-    NodeId: Hash + Eq,
+    Id: Hash + Eq,
 {
-    type NodeId = NodeId;
+    type NodeId = &'a Id;
 
-    fn adjacents(&self, node: &Self::NodeId) -> impl Iterator<Item = &Self::NodeId> {
+    fn adjacents(&'a self, node: &'a Id) -> impl Iterator<Item = &'a Id> {
         self.matrix[node].1.iter()
     }
 
-    fn iter(&self) -> impl Iterator<Item = &Self::NodeId> {
+    fn iter(&'a self) -> impl Iterator<Item = &'a Id> {
         self.matrix.keys()
     }
 }
 
-impl<NodeId, Node> Debug for AdjacencyVecGraph<NodeId, Node>
+impl<NodeId, Node> Debug for AdjacencyVecGraph<'_, NodeId, Node>
 where
     NodeId: Hash + Eq + Debug,
     Node: Debug,
@@ -78,18 +77,19 @@ where
     }
 }
 
-impl<NodeId, Node> Default for AdjacencyVecGraph<NodeId, Node>
+impl<NodeId, Node> Default for AdjacencyVecGraph<'_, NodeId, Node>
 where
     NodeId: Hash + Eq,
 {
     fn default() -> Self {
         Self {
             matrix: Default::default(),
+            phantom: PhantomData,
         }
     }
 }
 
-impl<NodeId, Node> Index<NodeId> for AdjacencyVecGraph<NodeId, Node>
+impl<NodeId, Node> Index<NodeId> for AdjacencyVecGraph<'_, NodeId, Node>
 where
     NodeId: Hash + Eq,
 {
@@ -100,7 +100,7 @@ where
     }
 }
 
-impl<NodeId, Node> IndexMut<NodeId> for AdjacencyVecGraph<NodeId, Node>
+impl<NodeId, Node> IndexMut<NodeId> for AdjacencyVecGraph<'_, NodeId, Node>
 where
     NodeId: Hash + Eq,
 {

@@ -3,20 +3,20 @@ use crate::Graph;
 
 pub struct PreOrderDFS<'a, NodeId, G>
 where
-    NodeId: Hash + Eq,
-    G: Graph<NodeId = NodeId>,
+    NodeId: Hash + Eq + Copy,
+    G: Graph<'a, NodeId = NodeId>,
 {
     graph: &'a G,
-    visited: HashSet<&'a NodeId>,
-    stack: Vec<&'a NodeId>,
+    visited: HashSet<NodeId>,
+    stack: Vec<NodeId>,
 }
 
 impl<'a, NodeId, G> PreOrderDFS<'a, NodeId, G>
 where
-    NodeId: Hash + Eq,
-    G: Graph<NodeId = NodeId>,
+    NodeId: Hash + Eq + Copy,
+    G: Graph<'a, NodeId = NodeId>,
 {
-    pub fn new(graph: &'a G, root: &'a NodeId) -> Self {
+    pub fn new(graph: &'a G, root: NodeId) -> Self {
         Self {
             graph,
             visited: HashSet::new(),
@@ -24,7 +24,7 @@ where
         }
     }
 
-    pub fn with_visited(graph: &'a G, root: &'a NodeId, visited: HashSet<&'a NodeId>) -> Self {
+    pub fn with_visited(graph: &'a G, root: NodeId, visited: HashSet<NodeId>) -> Self {
         Self {
             graph,
             visited,
@@ -35,10 +35,10 @@ where
 
 impl<'a, NodeId, G> Iterator for PreOrderDFS<'a, NodeId, G>
 where
-    NodeId: Hash + Eq,
-    G: Graph<NodeId = NodeId>,
+    NodeId: Hash + Eq + Copy,
+    G: Graph<'a, NodeId = NodeId>,
 {
-    type Item = &'a NodeId;
+    type Item = NodeId;
 
     fn next(&mut self) -> Option<Self::Item> {
         let current = self.stack.pop()?;
@@ -46,7 +46,7 @@ where
         self.visited.insert(current);
 
         for adj in self.graph.adjacents(current) {
-            if !self.visited.contains(adj) {
+            if !self.visited.contains(&adj) {
                 self.stack.push(adj);
             }
         }
@@ -62,20 +62,20 @@ enum VisitTag {
 
 pub struct PostOrderDFS<'a, NodeId, G>
 where
-    NodeId: Hash + Eq,
-    G: Graph<NodeId = NodeId>,
+    NodeId: Hash + Eq + Copy,
+    G: Graph<'a, NodeId = NodeId>,
 {
     graph: &'a G,
-    visited: HashSet<&'a NodeId>,
-    stack: Vec<(&'a NodeId, VisitTag)>,
+    visited: HashSet<NodeId>,
+    stack: Vec<(NodeId, VisitTag)>,
 }
 
 impl<'a, NodeId, G> PostOrderDFS<'a, NodeId, G>
 where
-    NodeId: Hash + Eq,
-    G: Graph<NodeId = NodeId>,
+    NodeId: Hash + Eq + Copy,
+    G: Graph<'a, NodeId = NodeId>,
 {
-    pub fn new(graph: &'a G, root: &'a NodeId) -> Self {
+    pub fn new(graph: &'a G, root: NodeId) -> Self {
         Self {
             graph,
             visited: HashSet::new(),
@@ -83,7 +83,7 @@ where
         }
     }
 
-    pub fn with_visited(graph: &'a G, root: &'a NodeId, visited: HashSet<&'a NodeId>) -> Self {
+    pub fn with_visited(graph: &'a G, root: NodeId, visited: HashSet<NodeId>) -> Self {
         Self {
             graph,
             visited,
@@ -94,10 +94,10 @@ where
 
 impl<'a, NodeId, G> Iterator for PostOrderDFS<'a, NodeId, G>
 where
-    NodeId: Hash + Eq,
-    G: Graph<NodeId = NodeId>,
+    NodeId: Hash + Eq + Copy,
+    G: Graph<'a, NodeId = NodeId>,
 {
-    type Item = &'a NodeId;
+    type Item = NodeId;
 
     fn next(&mut self) -> Option<Self::Item> {
         let (current, tag) = self.stack.pop()?;
@@ -109,7 +109,7 @@ where
                 self.visited.insert(current);
 
                 for adj in self.graph.adjacents(current) {
-                    if !self.visited.contains(adj) {
+                    if !self.visited.contains(&adj) {
                         self.stack.push((adj, VisitTag::Discovered));
                     }
                 }

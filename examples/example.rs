@@ -6,9 +6,6 @@ struct Node {
 }
 
 fn main() {
-    let mut my_vec = vec![1, 2, 3, 4, 5];
-    my_vec[0] += 2;
-
     let mut graph = AdjacencyVecGraph::<u8, Node>::new();
     println!("{graph:?}");
     graph.add_node(
