@@ -1,5 +1,5 @@
-use std::{collections::HashSet, hash::Hash};
 use crate::Graph;
+use std::{collections::HashSet, hash::Hash};
 
 pub struct PreOrderDFS<'a, NodeId, G>
 where
@@ -120,4 +120,3 @@ where
         }
     }
 }
-

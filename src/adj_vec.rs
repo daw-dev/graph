@@ -1,5 +1,9 @@
 use std::{
-    collections::{HashMap, HashSet}, fmt::Debug, hash::Hash, marker::PhantomData, ops::{Index, IndexMut}
+    collections::{HashMap, HashSet},
+    fmt::Debug,
+    hash::Hash,
+    marker::PhantomData,
+    ops::{Index, IndexMut},
 };
 
 use super::graph::Graph;
@@ -68,7 +72,15 @@ where
         for (id, (node, adjacents)) in self.matrix.iter() {
             writeln!(f, "  Node {id:?} {{")?;
             writeln!(f, "    data: {node:?},")?;
-            writeln!(f, "    adjacents: [ {} ],", adjacents.iter().map(|id| format!("{id:?}")).collect::<Vec<_>>().join(", "))?;
+            writeln!(
+                f,
+                "    adjacents: [ {} ],",
+                adjacents
+                    .iter()
+                    .map(|id| format!("{id:?}"))
+                    .collect::<Vec<_>>()
+                    .join(", ")
+            )?;
             writeln!(f, "  }},")?;
         }
         write!(f, "}}")?;

@@ -1,5 +1,8 @@
-use std::{collections::{HashSet, VecDeque}, hash::Hash};
 use crate::Graph;
+use std::{
+    collections::{HashSet, VecDeque},
+    hash::Hash,
+};
 
 pub struct BFS<'a, NodeId, G>
 where

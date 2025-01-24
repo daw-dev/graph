@@ -1,5 +1,5 @@
-use std::{collections::HashSet, hash::Hash, marker::PhantomData};
 use crate::{traversal::PostOrderDFS, Graph};
+use std::{collections::HashSet, hash::Hash, marker::PhantomData};
 
 pub struct TopSort<'a, NodeId>
 where

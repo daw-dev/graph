@@ -1,6 +1,6 @@
-mod dfs;
 mod bfs;
+mod dfs;
 
-pub use dfs::PreOrderDFS as PreOrderDFS;
-pub use dfs::PostOrderDFS as PostOrderDFS;
-pub use bfs::BFS as BFS;
+pub use bfs::BFS;
+pub use dfs::PostOrderDFS;
+pub use dfs::PreOrderDFS;
