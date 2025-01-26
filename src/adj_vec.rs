@@ -2,21 +2,19 @@ use std::{
     collections::{HashMap, HashSet},
     fmt::Debug,
     hash::Hash,
-    marker::PhantomData,
     ops::{Index, IndexMut},
 };
 
 use super::graph::Graph;
 
-pub struct AdjacencyVecGraph<'a, NodeId, NodeType>
+pub struct AdjacencyVecGraph<NodeId, NodeType>
 where
     NodeId: Hash + Eq,
 {
     matrix: HashMap<NodeId, (NodeType, HashSet<NodeId>)>,
-    phantom: PhantomData<&'a NodeId>,
 }
 
-impl<'a, NodeId, Node> AdjacencyVecGraph<'a, NodeId, Node>
+impl<'a, NodeId, Node> AdjacencyVecGraph<NodeId, Node>
 where
     NodeId: Hash + Eq,
 {
@@ -47,9 +45,10 @@ where
     }
 }
 
-impl<'a, Id, Node> Graph<'a> for AdjacencyVecGraph<'a, Id, Node>
+impl<'a, Id, Node> Graph<'a> for AdjacencyVecGraph<Id, Node>
 where
     Id: Hash + Eq,
+    Self: 'a,
 {
     type NodeId = &'a Id;
 
@@ -62,7 +61,7 @@ where
     }
 }
 
-impl<NodeId, Node> Debug for AdjacencyVecGraph<'_, NodeId, Node>
+impl<NodeId, Node> Debug for AdjacencyVecGraph<NodeId, Node>
 where
     NodeId: Hash + Eq + Debug,
     Node: Debug,
@@ -89,19 +88,18 @@ where
     }
 }
 
-impl<NodeId, Node> Default for AdjacencyVecGraph<'_, NodeId, Node>
+impl<NodeId, Node> Default for AdjacencyVecGraph<NodeId, Node>
 where
     NodeId: Hash + Eq,
 {
     fn default() -> Self {
         Self {
             matrix: Default::default(),
-            phantom: PhantomData,
         }
     }
 }
 
-impl<NodeId, Node> Index<NodeId> for AdjacencyVecGraph<'_, NodeId, Node>
+impl<NodeId, Node> Index<NodeId> for AdjacencyVecGraph<NodeId, Node>
 where
     NodeId: Hash + Eq,
 {
@@ -112,7 +110,7 @@ where
     }
 }
 
-impl<NodeId, Node> IndexMut<NodeId> for AdjacencyVecGraph<'_, NodeId, Node>
+impl<NodeId, Node> IndexMut<NodeId> for AdjacencyVecGraph<NodeId, Node>
 where
     NodeId: Hash + Eq,
 {
