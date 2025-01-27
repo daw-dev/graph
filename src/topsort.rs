@@ -24,9 +24,7 @@ where
             }
         }
 
-        Self {
-            stack,
-        }
+        Self { stack }
     }
 }
 
