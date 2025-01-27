@@ -1,4 +1,4 @@
-use crate::Graph;
+use crate::{graph::Graph, ReferenceGraph};
 use std::{
     collections::{HashSet, VecDeque},
     hash::Hash,
@@ -6,20 +6,20 @@ use std::{
 
 pub struct BFS<'a, NodeId, G>
 where
-    NodeId: Hash + Eq + Copy,
+    NodeId: Hash + Eq,
     G: Graph<NodeId = NodeId>,
 {
     graph: &'a G,
-    visited: HashSet<NodeId>,
-    queue: VecDeque<NodeId>,
+    visited: HashSet<&'a NodeId>,
+    queue: VecDeque<&'a NodeId>,
 }
 
 impl<'a, NodeId, G> BFS<'a, NodeId, G>
 where
-    NodeId: Hash + Eq + Copy,
-    G: Graph<NodeId = NodeId>,
+    NodeId: Hash + Eq,
+    G: ReferenceGraph<NodeId = NodeId>,
 {
-    pub fn new(graph: &'a G, root: NodeId) -> Self {
+    pub fn new(graph: &'a G, root: &'a NodeId) -> Self {
         Self {
             graph,
             visited: HashSet::new(),
@@ -27,7 +27,7 @@ where
         }
     }
 
-    pub fn with_visited(graph: &'a G, root: NodeId, visited: HashSet<NodeId>) -> Self {
+    pub fn with_visited(graph: &'a G, root: &'a NodeId, visited: HashSet<&'a NodeId>) -> Self {
         Self {
             graph,
             visited,
@@ -38,10 +38,10 @@ where
 
 impl<'a, NodeId, G> Iterator for BFS<'a, NodeId, G>
 where
-    NodeId: Hash + Eq + Copy,
-    G: Graph<NodeId = NodeId>,
+    NodeId: Hash + Eq,
+    G: ReferenceGraph<NodeId = NodeId>,
 {
-    type Item = NodeId;
+    type Item = &'a NodeId;
 
     fn next(&mut self) -> Option<Self::Item> {
         let current = self.queue.pop_front()?;

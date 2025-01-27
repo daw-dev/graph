@@ -5,7 +5,9 @@ use std::{
     ops::{Index, IndexMut},
 };
 
-use super::graph::Graph;
+use crate::graph::Graph;
+
+use super::graph::ReferenceGraph;
 
 pub struct AdjacencyVecGraph<NodeId, NodeType>
 where
@@ -45,17 +47,22 @@ where
     }
 }
 
-impl<'a, Id, Node> Graph for &'a AdjacencyVecGraph<Id, Node>
+impl<Id, Node> Graph for AdjacencyVecGraph<Id, Node>
 where
     Id: Hash + Eq,
 {
-    type NodeId = &'a Id;
+    type NodeId = Id;
+}
 
-    fn adjacents(&self, node: Self::NodeId) -> impl Iterator<Item = Self::NodeId> {
+impl<Id, Node> ReferenceGraph for AdjacencyVecGraph<Id, Node>
+where
+    Id: Hash + Eq,
+{
+    fn adjacents(&self, node: &Self::NodeId) -> impl Iterator<Item = &Self::NodeId> {
         self.matrix[node].1.iter()
     }
 
-    fn iter(&self) -> impl Iterator<Item = Self::NodeId> {
+    fn iter(&self) -> impl Iterator<Item = &Self::NodeId> {
         self.matrix.keys()
     }
 }

@@ -1,4 +1,4 @@
-use graph::{AdjacencyVecGraph, Graph};
+use graph::{AdjacencyVecGraph, ReferenceGraph};
 
 #[derive(Debug)]
 struct Node {
@@ -36,7 +36,7 @@ fn main() {
     // 0  0  1  0
     // 1  0  0  1
     // 2  1  0  0
-    for node in graph.bfs(0) {
-        println!("{node}");
-    }
+    // for node in graph.bfs(0) {
+    //     println!("{node}");
+    // }
 }

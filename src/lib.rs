@@ -5,4 +5,4 @@ mod topsort;
 mod traversal;
 
 pub use adj_vec::AdjacencyVecGraph;
-pub use graph::Graph;
+pub use graph::ReferenceGraph;
