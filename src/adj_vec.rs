@@ -45,18 +45,17 @@ where
     }
 }
 
-impl<'a, Id, Node> Graph<'a> for AdjacencyVecGraph<Id, Node>
+impl<'a, Id, Node> Graph for &'a AdjacencyVecGraph<Id, Node>
 where
     Id: Hash + Eq,
-    Self: 'a,
 {
     type NodeId = &'a Id;
 
-    fn adjacents(&'a self, node: &'a Id) -> impl Iterator<Item = &'a Id> {
+    fn adjacents(&self, node: Self::NodeId) -> impl Iterator<Item = Self::NodeId> {
         self.matrix[node].1.iter()
     }
 
-    fn iter(&'a self) -> impl Iterator<Item = &'a Id> {
+    fn iter(&self) -> impl Iterator<Item = Self::NodeId> {
         self.matrix.keys()
     }
 }

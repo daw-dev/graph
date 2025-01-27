@@ -13,7 +13,7 @@ impl<'a, NodeId> TopSort<'a, NodeId>
 where
     NodeId: Hash + Eq + Copy,
 {
-    pub fn new(graph: &'a impl Graph<'a, NodeId = NodeId>) -> Self {
+    pub fn new(graph: &'a impl Graph<NodeId = NodeId>) -> Self {
         let mut stack = Vec::new();
         let mut visited = HashSet::new();
 
