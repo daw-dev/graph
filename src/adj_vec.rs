@@ -52,11 +52,11 @@ where
 {
     type NodeId = &'a Id;
 
-    fn adjacents(&self, node: &'a Id) -> impl Iterator<Item = &'a Id> {
+    fn adjacents(&'a self, node: &'a Id) -> impl Iterator<Item = &'a Id> {
         self.matrix[node].1.iter()
     }
 
-    fn iter(&self) -> impl Iterator<Item = &'a Id> {
+    fn iter(&'a self) -> impl Iterator<Item = &'a Id> {
         self.matrix.keys()
     }
 }
