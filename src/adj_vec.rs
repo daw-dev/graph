@@ -16,7 +16,7 @@ where
     matrix: HashMap<NodeId, (NodeType, HashSet<NodeId>)>,
 }
 
-impl<'a, NodeId, Node> AdjacencyVecGraph<NodeId, Node>
+impl<NodeId, Node> AdjacencyVecGraph<NodeId, Node>
 where
     NodeId: Hash + Eq,
 {

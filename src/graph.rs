@@ -32,7 +32,7 @@ pub trait ReferenceGraph: Graph {
     {
         BFS::new(self, root)
     }
-    fn top_sort<'a>(&'a self) -> TopSort<'a, Self::NodeId>
+    fn top_sort(&self) -> TopSort<'_, Self::NodeId>
     where
         Self: Sized,
         Self::NodeId: Hash + Eq,
@@ -44,28 +44,28 @@ pub trait ReferenceGraph: Graph {
 pub trait CopyGraph: Graph {
     fn adjacents(&self, node: Self::NodeId) -> impl Iterator<Item = Self::NodeId>;
     fn iter(&self) -> impl Iterator<Item = Self::NodeId>;
-    fn pre_order_dfs<'a>(&'a self, root: Self::NodeId) -> PreOrderDFS<'a, Self::NodeId, Self>
+    fn pre_order_dfs(&self, root: Self::NodeId) -> PreOrderDFS<'_, Self::NodeId, Self>
     where
         Self: Sized,
         Self::NodeId: Hash + Eq,
     {
         todo!()
     }
-    fn post_order_dfs<'a>(&'a self, root: Self::NodeId) -> PostOrderDFS<'a, Self::NodeId, Self>
+    fn post_order_dfs(&self, root: Self::NodeId) -> PostOrderDFS<'_, Self::NodeId, Self>
     where
         Self: Sized,
         Self::NodeId: Hash + Eq,
     {
         todo!()
     }
-    fn bfs<'a>(&'a self, root: Self::NodeId) -> BFS<'a, Self::NodeId, Self>
+    fn bfs(&self, root: Self::NodeId) -> BFS<'_, Self::NodeId, Self>
     where
         Self: Sized,
         Self::NodeId: Hash + Eq,
     {
         todo!()
     }
-    fn top_sort<'a>(&'a self) -> TopSort<'a, Self::NodeId>
+    fn top_sort(&self) -> TopSort<'_, Self::NodeId>
     where
         Self: Sized,
         Self::NodeId: Hash + Eq,
