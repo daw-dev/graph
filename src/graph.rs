@@ -4,13 +4,11 @@ use crate::{
 };
 use std::hash::Hash;
 
-pub trait Graph {
+pub trait ReferenceGraph {
     type NodeId;
-}
-
-pub trait ReferenceGraph: Graph {
     fn adjacents(&self, node: &Self::NodeId) -> impl Iterator<Item = &Self::NodeId>;
     fn iter(&self) -> impl Iterator<Item = &Self::NodeId>;
+
     fn pre_order_dfs<'a>(&'a self, root: &'a Self::NodeId) -> PreOrderDFS<'a, Self::NodeId, Self>
     where
         Self: Sized,
@@ -41,30 +39,33 @@ pub trait ReferenceGraph: Graph {
     }
 }
 
-pub trait CopyGraph: Graph {
+pub trait CopyGraph {
+    type NodeId;
+
     fn adjacents(&self, node: Self::NodeId) -> impl Iterator<Item = Self::NodeId>;
     fn iter(&self) -> impl Iterator<Item = Self::NodeId>;
-    fn pre_order_dfs(&self, root: Self::NodeId) -> PreOrderDFS<'_, Self::NodeId, Self>
-    where
-        Self: Sized,
-        Self::NodeId: Hash + Eq,
-    {
-        todo!()
-    }
-    fn post_order_dfs(&self, root: Self::NodeId) -> PostOrderDFS<'_, Self::NodeId, Self>
-    where
-        Self: Sized,
-        Self::NodeId: Hash + Eq,
-    {
-        todo!()
-    }
-    fn bfs(&self, root: Self::NodeId) -> BFS<'_, Self::NodeId, Self>
-    where
-        Self: Sized,
-        Self::NodeId: Hash + Eq,
-    {
-        todo!()
-    }
+
+    // fn pre_order_dfs(&self, root: Self::NodeId) -> PreOrderDFS<'_, Self::NodeId, Self>
+    // where
+    //     Self: Sized,
+    //     Self::NodeId: Hash + Eq,
+    // {
+    //     todo!()
+    // }
+    // fn post_order_dfs(&self, root: Self::NodeId) -> PostOrderDFS<'_, Self::NodeId, Self>
+    // where
+    //     Self: Sized,
+    //     Self::NodeId: Hash + Eq,
+    // {
+    //     todo!()
+    // }
+    // fn bfs(&self, root: Self::NodeId) -> BFS<'_, Self::NodeId, Self>
+    // where
+    //     Self: Sized,
+    //     Self::NodeId: Hash + Eq,
+    // {
+    //     todo!()
+    // }
     fn top_sort(&self) -> TopSort<'_, Self::NodeId>
     where
         Self: Sized,

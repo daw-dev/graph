@@ -1,4 +1,4 @@
-use crate::{graph::Graph, ReferenceGraph};
+use crate::ReferenceGraph;
 use std::{
     collections::{HashSet, VecDeque},
     hash::Hash,
@@ -7,7 +7,7 @@ use std::{
 pub struct BFS<'a, NodeId, G>
 where
     NodeId: Hash + Eq,
-    G: Graph<NodeId = NodeId>,
+    G: ReferenceGraph<NodeId = NodeId>,
 {
     graph: &'a G,
     visited: HashSet<&'a NodeId>,

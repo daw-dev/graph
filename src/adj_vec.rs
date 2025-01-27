@@ -4,9 +4,6 @@ use std::{
     hash::Hash,
     ops::{Index, IndexMut},
 };
-
-use crate::graph::Graph;
-
 use super::graph::ReferenceGraph;
 
 pub struct AdjacencyVecGraph<NodeId, NodeType>
@@ -47,17 +44,12 @@ where
     }
 }
 
-impl<Id, Node> Graph for AdjacencyVecGraph<Id, Node>
-where
-    Id: Hash + Eq,
-{
-    type NodeId = Id;
-}
-
 impl<Id, Node> ReferenceGraph for AdjacencyVecGraph<Id, Node>
 where
-    Id: Hash + Eq,
+Id: Hash + Eq,
 {
+    type NodeId = Id;
+
     fn adjacents(&self, node: &Self::NodeId) -> impl Iterator<Item = &Self::NodeId> {
         self.matrix[node].1.iter()
     }

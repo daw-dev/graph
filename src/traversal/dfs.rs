@@ -1,10 +1,10 @@
-use crate::{graph::Graph, ReferenceGraph};
+use crate::ReferenceGraph;
 use std::{collections::HashSet, hash::Hash};
 
 pub struct PreOrderDFS<'a, NodeId, G>
 where
     NodeId: Hash + Eq,
-    G: Graph<NodeId = NodeId>,
+    G: ReferenceGraph<NodeId = NodeId>,
 {
     graph: &'a G,
     visited: HashSet<&'a NodeId>,
@@ -63,7 +63,7 @@ enum VisitTag {
 pub struct PostOrderDFS<'a, NodeId, G>
 where
     NodeId: Hash + Eq,
-    G: Graph<NodeId = NodeId>,
+    G: ReferenceGraph<NodeId = NodeId>,
 {
     graph: &'a G,
     visited: HashSet<&'a NodeId>,
