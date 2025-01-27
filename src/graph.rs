@@ -7,8 +7,8 @@ use std::hash::Hash;
 pub trait Graph<'a> {
     type NodeId: Copy + 'a;
 
-    fn adjacents(&'a self, node: Self::NodeId) -> impl Iterator<Item = Self::NodeId>;
-    fn iter(&'a self) -> impl Iterator<Item = Self::NodeId>;
+    fn adjacents<'b: 'a>(&'b self, node: Self::NodeId) -> impl Iterator<Item = Self::NodeId>;
+    fn iter<'b: 'a>(&'b self) -> impl Iterator<Item = Self::NodeId>;
     fn pre_order_dfs(&'a self, root: Self::NodeId) -> PreOrderDFS<'a, Self::NodeId, Self>
     where
         Self: Sized,
