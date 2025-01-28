@@ -75,6 +75,20 @@ where
         self.matrix.remove(node_id).map(|(info, _)| info)
     }
 
+    pub fn remove_directed_edge(&mut self, from: &NodeKey, to: &NodeKey) {
+        if let Some((_, adjacents)) = self.matrix.get_mut(from) {
+            adjacents.remove(to);
+        }
+    }
+
+    pub fn remove_undirected_edge(&mut self, from: &NodeKey, to: &NodeKey)
+    where
+        NodeKey: Clone,
+    {
+        self.remove_directed_edge(from, to);
+        self.remove_directed_edge(to, from);
+    }
+
     pub fn clear(&mut self) {
         self.matrix.clear();
     }
