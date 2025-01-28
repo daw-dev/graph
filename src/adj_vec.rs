@@ -10,6 +10,7 @@ pub struct AdjacencyVecGraph<NodeKey, NodeValue>
 where
     NodeKey: Hash + Eq,
 {
+    // TODO: maybe turn this into a HashSet<&NodeKey>?
     matrix: HashMap<NodeKey, (NodeValue, HashSet<NodeKey>)>,
 }
 
