@@ -4,7 +4,7 @@ use std::{collections::HashSet, hash::Hash};
 pub struct PreOrderDFS<'a, NodeId, G>
 where
     NodeId: Hash + Eq,
-    G: ReferenceGraph<NodeId = NodeId>,
+    G: ReferenceGraph<NodeKey = NodeId>,
 {
     graph: &'a G,
     visited: HashSet<&'a NodeId>,
@@ -14,7 +14,7 @@ where
 impl<'a, NodeId, G> PreOrderDFS<'a, NodeId, G>
 where
     NodeId: Hash + Eq,
-    G: ReferenceGraph<NodeId = NodeId>,
+    G: ReferenceGraph<NodeKey = NodeId>,
 {
     pub fn new(graph: &'a G, root: &'a NodeId) -> Self {
         Self {
@@ -36,7 +36,7 @@ where
 impl<'a, NodeId, G> Iterator for PreOrderDFS<'a, NodeId, G>
 where
     NodeId: Hash + Eq,
-    G: ReferenceGraph<NodeId = NodeId>,
+    G: ReferenceGraph<NodeKey = NodeId>,
 {
     type Item = &'a NodeId;
 
@@ -63,7 +63,7 @@ enum VisitTag {
 pub struct PostOrderDFS<'a, NodeId, G>
 where
     NodeId: Hash + Eq,
-    G: ReferenceGraph<NodeId = NodeId>,
+    G: ReferenceGraph<NodeKey = NodeId>,
 {
     graph: &'a G,
     visited: HashSet<&'a NodeId>,
@@ -73,7 +73,7 @@ where
 impl<'a, NodeId, G> PostOrderDFS<'a, NodeId, G>
 where
     NodeId: Hash + Eq,
-    G: ReferenceGraph<NodeId = NodeId>,
+    G: ReferenceGraph<NodeKey = NodeId>,
 {
     pub fn new(graph: &'a G, root: &'a NodeId) -> Self {
         Self {
@@ -95,7 +95,7 @@ where
 impl<'a, NodeId, G> Iterator for PostOrderDFS<'a, NodeId, G>
 where
     NodeId: Hash + Eq,
-    G: ReferenceGraph<NodeId = NodeId>,
+    G: ReferenceGraph<NodeKey = NodeId>,
 {
     type Item = &'a NodeId;
 

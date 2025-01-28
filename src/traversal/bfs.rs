@@ -7,7 +7,7 @@ use std::{
 pub struct BFS<'a, NodeId, G>
 where
     NodeId: Hash + Eq,
-    G: ReferenceGraph<NodeId = NodeId>,
+    G: ReferenceGraph<NodeKey = NodeId>,
 {
     graph: &'a G,
     visited: HashSet<&'a NodeId>,
@@ -17,7 +17,7 @@ where
 impl<'a, NodeId, G> BFS<'a, NodeId, G>
 where
     NodeId: Hash + Eq,
-    G: ReferenceGraph<NodeId = NodeId>,
+    G: ReferenceGraph<NodeKey = NodeId>,
 {
     pub fn new(graph: &'a G, root: &'a NodeId) -> Self {
         Self {
@@ -39,7 +39,7 @@ where
 impl<'a, NodeId, G> Iterator for BFS<'a, NodeId, G>
 where
     NodeId: Hash + Eq,
-    G: ReferenceGraph<NodeId = NodeId>,
+    G: ReferenceGraph<NodeKey = NodeId>,
 {
     type Item = &'a NodeId;
 

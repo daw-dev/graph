@@ -48,13 +48,13 @@ impl<Id, Node> ReferenceGraph for AdjacencyVecGraph<Id, Node>
 where
 Id: Hash + Eq,
 {
-    type NodeId = Id;
+    type NodeKey = Id;
 
-    fn adjacents(&self, node: &Self::NodeId) -> impl Iterator<Item = &Self::NodeId> {
+    fn adjacents(&self, node: &Self::NodeKey) -> impl Iterator<Item = &Self::NodeKey> {
         self.matrix[node].1.iter()
     }
 
-    fn iter(&self) -> impl Iterator<Item = &Self::NodeId> {
+    fn keys(&self) -> impl Iterator<Item = &Self::NodeKey> {
         self.matrix.keys()
     }
 }

@@ -5,35 +5,35 @@ use crate::{
 use std::hash::Hash;
 
 pub trait ReferenceGraph {
-    type NodeId;
-    fn adjacents(&self, node: &Self::NodeId) -> impl Iterator<Item = &Self::NodeId>;
-    fn iter(&self) -> impl Iterator<Item = &Self::NodeId>;
+    type NodeKey;
+    fn adjacents(&self, node: &Self::NodeKey) -> impl Iterator<Item = &Self::NodeKey>;
+    fn keys(&self) -> impl Iterator<Item = &Self::NodeKey>;
 
-    fn pre_order_dfs<'a>(&'a self, root: &'a Self::NodeId) -> PreOrderDFS<'a, Self::NodeId, Self>
+    fn pre_order_dfs<'a>(&'a self, root: &'a Self::NodeKey) -> PreOrderDFS<'a, Self::NodeKey, Self>
     where
         Self: Sized,
-        Self::NodeId: Hash + Eq,
+        Self::NodeKey: Hash + Eq,
     {
         PreOrderDFS::new(self, root)
     }
-    fn post_order_dfs<'a>(&'a self, root: &'a Self::NodeId) -> PostOrderDFS<'a, Self::NodeId, Self>
+    fn post_order_dfs<'a>(&'a self, root: &'a Self::NodeKey) -> PostOrderDFS<'a, Self::NodeKey, Self>
     where
         Self: Sized,
-        Self::NodeId: Hash + Eq,
+        Self::NodeKey: Hash + Eq,
     {
         PostOrderDFS::new(self, root)
     }
-    fn bfs<'a>(&'a self, root: &'a Self::NodeId) -> BFS<'a, Self::NodeId, Self>
+    fn bfs<'a>(&'a self, root: &'a Self::NodeKey) -> BFS<'a, Self::NodeKey, Self>
     where
         Self: Sized,
-        Self::NodeId: Hash + Eq,
+        Self::NodeKey: Hash + Eq,
     {
         BFS::new(self, root)
     }
-    fn top_sort(&self) -> TopSort<'_, Self::NodeId>
+    fn top_sort(&self) -> TopSort<'_, Self::NodeKey>
     where
         Self: Sized,
-        Self::NodeId: Hash + Eq,
+        Self::NodeKey: Hash + Eq,
     {
         TopSort::new(self)
     }

@@ -12,11 +12,11 @@ impl<'a, NodeId> TopSort<'a, NodeId>
 where
     NodeId: Hash + Eq,
 {
-    pub fn new(graph: &'a impl ReferenceGraph<NodeId = NodeId>) -> Self {
+    pub fn new(graph: &'a impl ReferenceGraph<NodeKey = NodeId>) -> Self {
         let mut stack = Vec::new();
         let mut visited = HashSet::new();
 
-        while let Some(next) = graph.iter().find(|id| !visited.contains(id)) {
+        while let Some(next) = graph.keys().find(|id| !visited.contains(id)) {
             // TODO: remove clone and someway take the visited set by mutable reference
             for id in PostOrderDFS::with_visited(graph, next, visited.clone()) {
                 visited.insert(id);
