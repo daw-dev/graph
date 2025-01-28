@@ -20,7 +20,7 @@ fn main() {
             name: "B".to_string(),
         },
     );
-    graph.connect(12, 46);
+    graph.add_directed_edge(12, 46);
     println!("{graph:?}");
 
     for node in graph.pre_order_dfs(&46) {

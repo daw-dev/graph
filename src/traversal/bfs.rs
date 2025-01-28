@@ -4,22 +4,22 @@ use std::{
     hash::Hash,
 };
 
-pub struct BFS<'a, NodeId, G>
+pub struct BFS<'a, NodeKey, G>
 where
-    NodeId: Hash + Eq,
-    G: ReferenceGraph<NodeKey = NodeId>,
+    NodeKey: Hash + Eq,
+    G: ReferenceGraph<NodeKey = NodeKey>,
 {
     graph: &'a G,
-    visited: HashSet<&'a NodeId>,
-    queue: VecDeque<&'a NodeId>,
+    visited: HashSet<&'a NodeKey>,
+    queue: VecDeque<&'a NodeKey>,
 }
 
-impl<'a, NodeId, G> BFS<'a, NodeId, G>
+impl<'a, NodeKey, G> BFS<'a, NodeKey, G>
 where
-    NodeId: Hash + Eq,
-    G: ReferenceGraph<NodeKey = NodeId>,
+    NodeKey: Hash + Eq,
+    G: ReferenceGraph<NodeKey = NodeKey>,
 {
-    pub fn new(graph: &'a G, root: &'a NodeId) -> Self {
+    pub fn new(graph: &'a G, root: &'a NodeKey) -> Self {
         Self {
             graph,
             visited: HashSet::new(),
@@ -27,7 +27,7 @@ where
         }
     }
 
-    pub fn with_visited(graph: &'a G, root: &'a NodeId, visited: HashSet<&'a NodeId>) -> Self {
+    pub fn with_visited(graph: &'a G, root: &'a NodeKey, visited: HashSet<&'a NodeKey>) -> Self {
         Self {
             graph,
             visited,
@@ -36,12 +36,12 @@ where
     }
 }
 
-impl<'a, NodeId, G> Iterator for BFS<'a, NodeId, G>
+impl<'a, NodeKey, G> Iterator for BFS<'a, NodeKey, G>
 where
-    NodeId: Hash + Eq,
-    G: ReferenceGraph<NodeKey = NodeId>,
+    NodeKey: Hash + Eq,
+    G: ReferenceGraph<NodeKey = NodeKey>,
 {
-    type Item = &'a NodeId;
+    type Item = &'a NodeKey;
 
     fn next(&mut self) -> Option<Self::Item> {
         let current = self.queue.pop_front()?;

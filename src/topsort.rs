@@ -1,18 +1,18 @@
 use crate::{traversal::PostOrderDFS, ReferenceGraph};
 use std::{collections::HashSet, hash::Hash};
 
-pub struct TopSort<'a, NodeId>
+pub struct TopSort<'a, NodeKey>
 where
-    NodeId: Hash + Eq,
+    NodeKey: Hash + Eq,
 {
-    stack: Vec<&'a NodeId>,
+    stack: Vec<&'a NodeKey>,
 }
 
-impl<'a, NodeId> TopSort<'a, NodeId>
+impl<'a, NodeKey> TopSort<'a, NodeKey>
 where
-    NodeId: Hash + Eq,
+    NodeKey: Hash + Eq,
 {
-    pub fn new(graph: &'a impl ReferenceGraph<NodeKey = NodeId>) -> Self {
+    pub fn new(graph: &'a impl ReferenceGraph<NodeKey = NodeKey>) -> Self {
         let mut stack = Vec::new();
         let mut visited = HashSet::new();
 
@@ -28,11 +28,11 @@ where
     }
 }
 
-impl<'a, NodeId> Iterator for TopSort<'a, NodeId>
+impl<'a, NodeKey> Iterator for TopSort<'a, NodeKey>
 where
-    NodeId: Hash + Eq,
+    NodeKey: Hash + Eq,
 {
-    type Item = &'a NodeId;
+    type Item = &'a NodeKey;
 
     fn next(&mut self) -> Option<Self::Item> {
         self.stack.pop()

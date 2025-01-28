@@ -1,22 +1,22 @@
 use crate::ReferenceGraph;
 use std::{collections::HashSet, hash::Hash};
 
-pub struct PreOrderDFS<'a, NodeId, G>
+pub struct PreOrderDFS<'a, NodeKey, G>
 where
-    NodeId: Hash + Eq,
-    G: ReferenceGraph<NodeKey = NodeId>,
+    NodeKey: Hash + Eq,
+    G: ReferenceGraph<NodeKey = NodeKey>,
 {
     graph: &'a G,
-    visited: HashSet<&'a NodeId>,
-    stack: Vec<&'a NodeId>,
+    visited: HashSet<&'a NodeKey>,
+    stack: Vec<&'a NodeKey>,
 }
 
-impl<'a, NodeId, G> PreOrderDFS<'a, NodeId, G>
+impl<'a, NodeKey, G> PreOrderDFS<'a, NodeKey, G>
 where
-    NodeId: Hash + Eq,
-    G: ReferenceGraph<NodeKey = NodeId>,
+    NodeKey: Hash + Eq,
+    G: ReferenceGraph<NodeKey = NodeKey>,
 {
-    pub fn new(graph: &'a G, root: &'a NodeId) -> Self {
+    pub fn new(graph: &'a G, root: &'a NodeKey) -> Self {
         Self {
             graph,
             visited: HashSet::new(),
@@ -24,7 +24,7 @@ where
         }
     }
 
-    pub fn with_visited(graph: &'a G, root: &'a NodeId, visited: HashSet<&'a NodeId>) -> Self {
+    pub fn with_visited(graph: &'a G, root: &'a NodeKey, visited: HashSet<&'a NodeKey>) -> Self {
         Self {
             graph,
             visited,
@@ -33,12 +33,12 @@ where
     }
 }
 
-impl<'a, NodeId, G> Iterator for PreOrderDFS<'a, NodeId, G>
+impl<'a, NodeKey, G> Iterator for PreOrderDFS<'a, NodeKey, G>
 where
-    NodeId: Hash + Eq,
-    G: ReferenceGraph<NodeKey = NodeId>,
+    NodeKey: Hash + Eq,
+    G: ReferenceGraph<NodeKey = NodeKey>,
 {
-    type Item = &'a NodeId;
+    type Item = &'a NodeKey;
 
     fn next(&mut self) -> Option<Self::Item> {
         let current = self.stack.pop()?;
@@ -60,22 +60,22 @@ enum VisitTag {
     Finished,
 }
 
-pub struct PostOrderDFS<'a, NodeId, G>
+pub struct PostOrderDFS<'a, NodeKey, G>
 where
-    NodeId: Hash + Eq,
-    G: ReferenceGraph<NodeKey = NodeId>,
+    NodeKey: Hash + Eq,
+    G: ReferenceGraph<NodeKey = NodeKey>,
 {
     graph: &'a G,
-    visited: HashSet<&'a NodeId>,
-    stack: Vec<(&'a NodeId, VisitTag)>,
+    visited: HashSet<&'a NodeKey>,
+    stack: Vec<(&'a NodeKey, VisitTag)>,
 }
 
-impl<'a, NodeId, G> PostOrderDFS<'a, NodeId, G>
+impl<'a, NodeKey, G> PostOrderDFS<'a, NodeKey, G>
 where
-    NodeId: Hash + Eq,
-    G: ReferenceGraph<NodeKey = NodeId>,
+    NodeKey: Hash + Eq,
+    G: ReferenceGraph<NodeKey = NodeKey>,
 {
-    pub fn new(graph: &'a G, root: &'a NodeId) -> Self {
+    pub fn new(graph: &'a G, root: &'a NodeKey) -> Self {
         Self {
             graph,
             visited: HashSet::new(),
@@ -83,7 +83,7 @@ where
         }
     }
 
-    pub fn with_visited(graph: &'a G, root: &'a NodeId, visited: HashSet<&'a NodeId>) -> Self {
+    pub fn with_visited(graph: &'a G, root: &'a NodeKey, visited: HashSet<&'a NodeKey>) -> Self {
         Self {
             graph,
             visited,
@@ -92,12 +92,12 @@ where
     }
 }
 
-impl<'a, NodeId, G> Iterator for PostOrderDFS<'a, NodeId, G>
+impl<'a, NodeKey, G> Iterator for PostOrderDFS<'a, NodeKey, G>
 where
-    NodeId: Hash + Eq,
-    G: ReferenceGraph<NodeKey = NodeId>,
+    NodeKey: Hash + Eq,
+    G: ReferenceGraph<NodeKey = NodeKey>,
 {
-    type Item = &'a NodeId;
+    type Item = &'a NodeKey;
 
     fn next(&mut self) -> Option<Self::Item> {
         let (current, tag) = self.stack.pop()?;

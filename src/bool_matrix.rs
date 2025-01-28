@@ -1,7 +1,7 @@
 use crate::graph::CopyGraph;
 
 impl<const SIZE: usize> CopyGraph for [[bool; SIZE]; SIZE] {
-    type NodeId = usize;
+    type NodeKey = usize;
     fn adjacents(&self, node: usize) -> impl Iterator<Item = usize> {
         self[node].iter().enumerate().filter_map(
             |(idx, &is_adj)| {
