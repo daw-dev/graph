@@ -82,8 +82,6 @@ where
     }
 
     pub fn remove_undirected_edge(&mut self, from: &NodeKey, to: &NodeKey)
-    where
-        NodeKey: Clone,
     {
         self.remove_directed_edge(from, to);
         self.remove_directed_edge(to, from);
