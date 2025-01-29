@@ -10,7 +10,6 @@ pub struct AdjacencyVecGraph<NodeKey, NodeValue>
 where
     NodeKey: Hash + Eq,
 {
-    // TODO: maybe turn this into a HashSet<&NodeKey>?
     matrix: HashMap<NodeKey, (NodeValue, HashSet<NodeKey>)>,
 }
 
@@ -138,6 +137,12 @@ where
 
     pub fn into_iter(self) -> impl Iterator<Item = (NodeKey, NodeValue)> {
         self.matrix.into_iter().map(|(id, (node, _))| (id, node))
+    }
+
+    pub fn edges(&self) -> impl Iterator<Item = (&NodeKey, &NodeKey)> {
+        self.matrix.iter().flat_map(|(from, (_, adjacents))| {
+            adjacents.iter().map(move |to| (from, to))
+        })
     }
 }
 
