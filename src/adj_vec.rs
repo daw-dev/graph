@@ -169,7 +169,7 @@ where
         AdjacencyVecGraph { matrix }
     }
 
-    pub fn map_values_with_keys<OtherNodeValue>(
+    pub fn map_values_with_key<OtherNodeValue>(
         self,
         mut f: impl FnMut(&NodeKey, NodeValue) -> OtherNodeValue,
     ) -> AdjacencyVecGraph<NodeKey, OtherNodeValue> {
