@@ -16,7 +16,10 @@ pub trait ReferenceGraph {
     {
         PreOrderDFS::new(self, root)
     }
-    fn post_order_dfs<'a>(&'a self, root: &'a Self::NodeKey) -> PostOrderDFS<'a, Self::NodeKey, Self>
+    fn post_order_dfs<'a>(
+        &'a self,
+        root: &'a Self::NodeKey,
+    ) -> PostOrderDFS<'a, Self::NodeKey, Self>
     where
         Self: Sized,
         Self::NodeKey: Hash + Eq,

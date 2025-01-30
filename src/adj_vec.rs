@@ -160,8 +160,7 @@ where
         self,
         mut f: impl FnMut(NodeValue) -> OtherNodeValue,
     ) -> AdjacencyVecGraph<NodeKey, OtherNodeValue> {
-        self
-            .matrix
+        self.matrix
             .into_iter()
             .map(|(id, (node, adjacents))| (id, (f(node), adjacents)))
             .collect()
@@ -171,8 +170,7 @@ where
         self,
         mut f: impl FnMut(&NodeKey, NodeValue) -> OtherNodeValue,
     ) -> AdjacencyVecGraph<NodeKey, OtherNodeValue> {
-        self
-            .matrix
+        self.matrix
             .into_iter()
             .map(|(id, (node, adjacents))| {
                 let new_node = f(&id, node);
@@ -194,10 +192,7 @@ where
             .map(|(id, (node, adjacents))| {
                 let new_id = fk(id);
                 let new_node = fv(node);
-                let new_adjacents = adjacents
-                    .into_iter()
-                    .map(|adj| fk(adj))
-                    .collect::<HashSet<_>>();
+                let new_adjacents = adjacents.into_iter().map(|adj| fk(adj)).collect();
 
                 (new_id, (new_node, new_adjacents))
             })
