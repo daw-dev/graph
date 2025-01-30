@@ -42,6 +42,10 @@ where
             .insert(node_id, (node_info, HashSet::with_capacity(capacity)));
     }
 
+    pub fn is_adjacent_to(&self, from: &NodeKey, to: &NodeKey) -> bool {
+        self.matrix.get(from).map_or(false, |(_, adjacents)| adjacents.contains(to))
+    }
+
     pub fn add_directed_edge(&mut self, from: NodeKey, to: NodeKey) {
         if from == to {
             return;
