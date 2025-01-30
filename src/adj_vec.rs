@@ -184,6 +184,46 @@ where
 
         AdjacencyVecGraph { matrix }
     }
+
+    pub fn map<OtherNodeKey, OtherNodeValue>(
+        self,
+        mut fk: impl FnMut(NodeKey) -> OtherNodeKey,
+        mut fv: impl FnMut(NodeValue) -> OtherNodeValue,
+    ) -> AdjacencyVecGraph<OtherNodeKey, OtherNodeValue>
+    where
+        OtherNodeKey: Hash + Eq,
+    {
+        self.matrix
+            .into_iter()
+            .map(|(id, (node, adjacents))| {
+                let new_id = fk(id);
+                let new_node = fv(node);
+                let new_adjacents = adjacents
+                    .into_iter()
+                    .map(|adj| fk(adj))
+                    .collect::<HashSet<_>>();
+
+                (new_id, (new_node, new_adjacents))
+            })
+            .collect()
+    }
+}
+
+impl<NodeKey, NodeValue> FromIterator<(NodeKey, (NodeValue, HashSet<NodeKey>))>
+    for AdjacencyVecGraph<NodeKey, NodeValue>
+where
+    NodeKey: Hash + Eq,
+{
+    fn from_iter<T: IntoIterator<Item = (NodeKey, (NodeValue, HashSet<NodeKey>))>>(
+        iter: T,
+    ) -> Self {
+        Self {
+            matrix: iter
+                .into_iter()
+                .map(|(key, (node, adj))| (key, (node, adj.into_iter().collect::<HashSet<_>>())))
+                .collect(),
+        }
+    }
 }
 
 impl<NodeKey, NodeValue> ReferenceGraph for AdjacencyVecGraph<NodeKey, NodeValue>

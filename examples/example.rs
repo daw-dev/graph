@@ -6,7 +6,7 @@ struct Node {
 }
 
 fn main() {
-    let mut graph = AdjacencyVecGraph::<u8, Node>::new();
+    let mut graph = AdjacencyVecGraph::new();
     println!("{graph:?}");
     graph.add_node(
         12,
@@ -28,7 +28,9 @@ fn main() {
         println!("name: {}", graph[*node].name);
     }
 
-    let graph = graph.clone();
+    let graph = graph.map(|key| format!("N_{key}"), |value| value.name.len());
+
+    println!("{graph:?}");
 
     let mut graph = [[false; 3]; 3];
     graph[0][1] = true;
