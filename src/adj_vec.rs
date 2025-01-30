@@ -43,7 +43,9 @@ where
     }
 
     pub fn is_adjacent_to(&self, from: &NodeKey, to: &NodeKey) -> bool {
-        self.matrix.get(from).map_or(false, |(_, adjacents)| adjacents.contains(to))
+        self.matrix
+            .get(from)
+            .map_or(false, |(_, adjacents)| adjacents.contains(to))
     }
 
     pub fn add_directed_edge(&mut self, from: NodeKey, to: NodeKey) {
@@ -86,8 +88,7 @@ where
         }
     }
 
-    pub fn remove_undirected_edge(&mut self, from: &NodeKey, to: &NodeKey)
-    {
+    pub fn remove_undirected_edge(&mut self, from: &NodeKey, to: &NodeKey) {
         self.remove_directed_edge(from, to);
         self.remove_directed_edge(to, from);
     }
@@ -101,7 +102,10 @@ where
     }
 
     pub fn edge_count(&self) -> usize {
-        self.matrix.values().map(|(_, adjacents)| adjacents.len()).sum()
+        self.matrix
+            .values()
+            .map(|(_, adjacents)| adjacents.len())
+            .sum()
     }
 
     pub fn is_empty(&self) -> bool {
@@ -113,7 +117,9 @@ where
     }
 
     pub fn contains_edge(&self, from: &NodeKey, to: &NodeKey) -> bool {
-        self.matrix.get(from).map_or(false, |(_, adjacents)| adjacents.contains(to))
+        self.matrix
+            .get(from)
+            .map_or(false, |(_, adjacents)| adjacents.contains(to))
     }
 
     pub fn drain(&mut self) -> impl Iterator<Item = (NodeKey, NodeValue)> + '_ {
@@ -145,19 +151,35 @@ where
     }
 
     pub fn edges(&self) -> impl Iterator<Item = (&NodeKey, &NodeKey)> {
-        self.matrix.iter().flat_map(|(from, (_, adjacents))| {
-            adjacents.iter().map(move |to| (from, to))
-        })
+        self.matrix
+            .iter()
+            .flat_map(|(from, (_, adjacents))| adjacents.iter().map(move |to| (from, to)))
     }
 
-    pub fn map_values<OtherNodeValue>(self, mut f: impl FnMut(NodeValue) -> OtherNodeValue) -> AdjacencyVecGraph<NodeKey, OtherNodeValue>
-    where
-        NodeKey: Hash + Eq,
-    {
+    pub fn map_values<OtherNodeValue>(
+        self,
+        mut f: impl FnMut(NodeValue) -> OtherNodeValue,
+    ) -> AdjacencyVecGraph<NodeKey, OtherNodeValue> {
         let matrix = self
             .matrix
             .into_iter()
             .map(|(id, (node, adjacents))| (id, (f(node), adjacents)))
+            .collect();
+
+        AdjacencyVecGraph { matrix }
+    }
+
+    pub fn map_values_with_keys<OtherNodeValue>(
+        self,
+        mut f: impl FnMut(&NodeKey, NodeValue) -> OtherNodeValue,
+    ) -> AdjacencyVecGraph<NodeKey, OtherNodeValue> {
+        let matrix = self
+            .matrix
+            .into_iter()
+            .map(|(id, (node, adjacents))| {
+                let new_node = f(&id, node);
+                (id, (new_node, adjacents))
+            })
             .collect();
 
         AdjacencyVecGraph { matrix }
