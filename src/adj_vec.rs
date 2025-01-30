@@ -6,6 +6,7 @@ use std::{
     ops::{Index, IndexMut},
 };
 
+#[derive(Clone)]
 pub struct AdjacencyVecGraph<NodeKey, NodeValue>
 where
     NodeKey: Hash + Eq,

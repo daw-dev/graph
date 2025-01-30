@@ -1,6 +1,6 @@
 use graph::{AdjacencyVecGraph, ReferenceGraph};
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 struct Node {
     name: String,
 }
@@ -27,6 +27,8 @@ fn main() {
         println!("{node:?}");
         println!("name: {}", graph[*node].name);
     }
+
+    let graph = graph.clone();
 
     let mut graph = [[false; 3]; 3];
     graph[0][1] = true;
