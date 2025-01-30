@@ -149,6 +149,19 @@ where
             adjacents.iter().map(move |to| (from, to))
         })
     }
+
+    pub fn map_values<OtherNodeValue>(self, mut f: impl FnMut(NodeValue) -> OtherNodeValue) -> AdjacencyVecGraph<NodeKey, OtherNodeValue>
+    where
+        NodeKey: Hash + Eq,
+    {
+        let matrix = self
+            .matrix
+            .into_iter()
+            .map(|(id, (node, adjacents))| (id, (f(node), adjacents)))
+            .collect();
+
+        AdjacencyVecGraph { matrix }
+    }
 }
 
 impl<NodeKey, NodeValue> ReferenceGraph for AdjacencyVecGraph<NodeKey, NodeValue>
