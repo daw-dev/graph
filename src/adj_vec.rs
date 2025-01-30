@@ -160,29 +160,25 @@ where
         self,
         mut f: impl FnMut(NodeValue) -> OtherNodeValue,
     ) -> AdjacencyVecGraph<NodeKey, OtherNodeValue> {
-        let matrix = self
+        self
             .matrix
             .into_iter()
             .map(|(id, (node, adjacents))| (id, (f(node), adjacents)))
-            .collect();
-
-        AdjacencyVecGraph { matrix }
+            .collect()
     }
 
     pub fn map_values_with_key<OtherNodeValue>(
         self,
         mut f: impl FnMut(&NodeKey, NodeValue) -> OtherNodeValue,
     ) -> AdjacencyVecGraph<NodeKey, OtherNodeValue> {
-        let matrix = self
+        self
             .matrix
             .into_iter()
             .map(|(id, (node, adjacents))| {
                 let new_node = f(&id, node);
                 (id, (new_node, adjacents))
             })
-            .collect();
-
-        AdjacencyVecGraph { matrix }
+            .collect()
     }
 
     pub fn map<OtherNodeKey, OtherNodeValue>(
