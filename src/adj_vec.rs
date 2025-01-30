@@ -7,7 +7,7 @@ use std::{
 };
 
 #[derive(Clone)]
-pub struct AdjacencyVecGraph<NodeKey, NodeValue>
+pub struct AdjacencyVecGraph<NodeKey, NodeValue = NodeKey>
 where
     NodeKey: Hash + Eq,
 {
