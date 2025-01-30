@@ -270,22 +270,22 @@ where
     }
 }
 
-impl<NodeKey, NodeValue> Index<NodeKey> for AdjacencyVecGraph<NodeKey, NodeValue>
+impl<NodeKey, NodeValue> Index<&NodeKey> for AdjacencyVecGraph<NodeKey, NodeValue>
 where
     NodeKey: Hash + Eq,
 {
     type Output = NodeValue;
 
-    fn index(&self, index: NodeKey) -> &Self::Output {
-        self.get(&index).expect("Node not found")
+    fn index(&self, index: &NodeKey) -> &Self::Output {
+        self.get(index).expect("Node not found")
     }
 }
 
-impl<NodeKey, NodeValue> IndexMut<NodeKey> for AdjacencyVecGraph<NodeKey, NodeValue>
+impl<NodeKey, NodeValue> IndexMut<&NodeKey> for AdjacencyVecGraph<NodeKey, NodeValue>
 where
     NodeKey: Hash + Eq,
 {
-    fn index_mut(&mut self, index: NodeKey) -> &mut Self::Output {
-        self.get_mut(&index).expect("Node not found")
+    fn index_mut(&mut self, index: &NodeKey) -> &mut Self::Output {
+        self.get_mut(index).expect("Node not found")
     }
 }
