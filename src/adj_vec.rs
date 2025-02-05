@@ -198,6 +198,11 @@ where
             })
             .collect()
     }
+
+    pub fn is_connected_undirected(&self) -> bool {
+        let dfs_count = self.pre_order_dfs(self.keys().next().unwrap()).count();
+        dfs_count == self.node_count()
+    }
 }
 
 impl<NodeKey, NodeValue> FromIterator<(NodeKey, (NodeValue, HashSet<NodeKey>))>
