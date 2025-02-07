@@ -46,10 +46,10 @@ where
     fn next(&mut self) -> Option<Self::Item> {
         let current = self.queue.pop_front()?;
 
-        self.visited.insert(current);
-
+        
         for adj in self.graph.adjacents(current) {
             if !self.visited.contains(&adj) {
+                self.visited.insert(&adj);
                 self.queue.push_back(adj);
             }
         }

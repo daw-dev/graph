@@ -19,7 +19,7 @@ where
     pub fn new(graph: &'a G, root: &'a NodeKey) -> Self {
         Self {
             graph,
-            visited: HashSet::new(),
+            visited: [root].into(),
             stack: vec![root],
         }
     }
@@ -43,10 +43,10 @@ where
     fn next(&mut self) -> Option<Self::Item> {
         let current = self.stack.pop()?;
 
-        self.visited.insert(current);
-
+        
         for adj in self.graph.adjacents(current) {
             if !self.visited.contains(&adj) {
+                self.visited.insert(&adj);
                 self.stack.push(adj);
             }
         }
@@ -78,7 +78,7 @@ where
     pub fn new(graph: &'a G, root: &'a NodeKey) -> Self {
         Self {
             graph,
-            visited: HashSet::new(),
+            visited: [root].into(),
             stack: vec![(root, VisitTag::Discovered)],
         }
     }
@@ -106,10 +106,10 @@ where
             VisitTag::Discovered => {
                 self.stack.push((current, VisitTag::Finished));
 
-                self.visited.insert(current);
-
+                
                 for adj in self.graph.adjacents(current) {
                     if !self.visited.contains(&adj) {
+                        self.visited.insert(&adj);
                         self.stack.push((adj, VisitTag::Discovered));
                     }
                 }

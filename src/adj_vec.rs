@@ -192,7 +192,7 @@ where
             .map(|(id, (node, adjacents))| {
                 let new_id = fk(id);
                 let new_node = fv(node);
-                let new_adjacents = adjacents.into_iter().map(|adj| fk(adj)).collect();
+                let new_adjacents = adjacents.into_iter().map(|adj| fk(adj)).collect::<HashSet<_>>();
 
                 (new_id, (new_node, new_adjacents))
             })
@@ -205,12 +205,13 @@ where
     }
 }
 
-impl<NodeKey, NodeValue> FromIterator<(NodeKey, (NodeValue, HashSet<NodeKey>))>
+impl<NodeKey, NodeValue, Set> FromIterator<(NodeKey, (NodeValue, Set))>
     for AdjacencyVecGraph<NodeKey, NodeValue>
 where
     NodeKey: Hash + Eq,
+    Set: IntoIterator<Item = NodeKey>,
 {
-    fn from_iter<T: IntoIterator<Item = (NodeKey, (NodeValue, HashSet<NodeKey>))>>(
+    fn from_iter<T: IntoIterator<Item = (NodeKey, (NodeValue, Set))>>(
         iter: T,
     ) -> Self {
         Self {

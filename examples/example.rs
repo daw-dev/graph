@@ -6,41 +6,52 @@ struct Node {
 }
 
 fn main() {
-    let mut graph = AdjacencyVecGraph::new();
-    println!("{graph:?}");
-    graph.add_node(
-        12,
-        Node {
-            name: "A".to_string(),
-        },
-    );
-    graph.add_node(
-        46,
-        Node {
-            name: "B".to_string(),
-        },
-    );
-    graph.add_directed_edge(12, 46);
-    println!("{graph:?}");
+    let graph: AdjacencyVecGraph<i32, Node> = AdjacencyVecGraph::from_iter([
+        (
+            1,
+            (
+                Node {
+                    name: "Node 1".to_string(),
+                },
+                vec![2],
+            ),
+        ),
+        (
+            2,
+            (
+                Node {
+                    name: "Node 2".to_string(),
+                },
+                vec![1, 3, 4],
+            ),
+        ),
+        (
+            3,
+            (
+                Node {
+                    name: "Node 3".to_string(),
+                },
+                vec![2, 4],
+            ),
+        ),
+        (
+            4,
+            (
+                Node {
+                    name: "Node 4".to_string(),
+                },
+                vec![2, 3],
+            ),
+        ),
+    ]);
 
-    for node in graph.pre_order_dfs(&46) {
-        println!("{node:?}");
-        println!("name: {}", graph[*node].name);
+    println!("{:?}", graph);
+
+    println!("Is connected? {}", graph.is_connected_undirected());
+
+    let root = graph.keys().next().unwrap();
+    let dfs = graph.pre_order_dfs(root);
+    for node in dfs {
+        println!("{:?}", node);
     }
-
-    let graph = graph.map(|key| format!("N_{key}"), |value| value.name.len());
-
-    println!("{graph:?}");
-
-    let mut graph = [[false; 3]; 3];
-    graph[0][1] = true;
-    graph[1][2] = true;
-    graph[2][0] = true;
-    //    0  1  2
-    // 0  0  1  0
-    // 1  0  0  1
-    // 2  1  0  0
-    // for node in graph.bfs(0) {
-    //     println!("{node}");
-    // }
 }
